@@ -914,12 +914,6 @@ document.getElementById("revengeReport")
 },{once:true});
 
 
-document.getElementById("quizWelcome")
-.addEventListener("click",()=>{
-
-    // NEXT PAGE WILL COME HERE
-
-});
 /* =========================
    QUIZ SECTION
 ========================= */
@@ -932,13 +926,17 @@ document.getElementById("quizWelcome")
     document.getElementById("quizWelcome").style.display="none";
 
     document.getElementById("quizPage").style.display="flex";
-
+    document.getElementById("quizPage").scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+   });
     showQuestion(0);
-
 });
 
 
 const quizScreens = document.querySelectorAll(".quizScreen");
+
+console.log("Quiz screens found =", quizScreens.length);
 
 let currentQuestion = 0;
 
@@ -947,11 +945,14 @@ let currentQuestion = 0;
 
 function showQuestion(index){
 
-    quizScreens.forEach(q=>{
+    quizScreens.forEach((q,i)=>{
         q.classList.remove("active");
+        console.log(i, q.className);
     });
 
     quizScreens[index].classList.add("active");
+
+    console.log("Current screen:", quizScreens[index]);
 
     currentQuestion = index;
 
@@ -1002,12 +1003,40 @@ document.querySelectorAll(".quizOption").forEach(btn=>{
 
 
 /* =========================
-   TEXT QUESTIONS
+   TEXT QUESTIONS (Validation)
 ========================= */
 
 document.querySelectorAll(".nextQuestion").forEach(btn=>{
 
     btn.addEventListener("click",()=>{
+
+        // Find current quiz screen
+        let screen = btn.closest(".quizScreen");
+
+        // Find textarea inside this screen
+        let input = screen.querySelector(".quizInput, .otherInput");
+
+        // If there is a textbox, validate it
+        if(input){
+
+            if(input.value.trim() === ""){
+
+                alert("Are Madam ji, aapka hi din hai... aaj to bata dijiye 😒");
+                input.focus();
+                return;
+
+            }
+
+        }
+        /* QUESTION 12 BREAK */
+
+        if(screen.id==="q12"){
+
+            document.getElementById("quizBreakPopup").style.display="flex";
+
+            return;
+
+        }
 
         nextQuestion();
 
@@ -1056,10 +1085,162 @@ document.querySelectorAll(".quizInput,.otherInput")
 
             e.preventDefault();
 
+            if(box.value.trim()===""){
+
+                alert("Are Madam ji, aapka hi din hai... aaj to bata dijiye 😒");
+                box.focus();
+                return;
+
+            }
+
             nextQuestion();
 
         }
 
     });
+
+});
+/* =========================
+   STUBBORN QUESTION POPUP
+========================= */
+
+const stubbornButtons = document.querySelectorAll(".stubbornOption");
+
+const stubbornPopup = document.getElementById("stubbornPopup");
+
+const stubbornPopupText = document.getElementById("stubbornPopupText");
+
+const popupNextBtn = document.getElementById("popupNextBtn");
+
+let popupFinished = false;
+
+stubbornButtons.forEach(btn=>{
+
+    btn.addEventListener("click",function(){
+
+        document.querySelectorAll(".stubbornOption")
+        .forEach(b=>b.classList.remove("selected"));
+
+        this.classList.add("selected");
+
+        popupFinished = false;
+
+        if(this.dataset.answer==="Aditya"){
+
+            stubbornPopupText.innerText=
+`😂 Correct Answer Detected!
+
+Aditya is scientifically proven to be the more stubborn one.
+
+He hears Anuja's advice...
+
+Processes advice...
+
+Then does whatever he wanted anyway.
+
+(just like waiting at stations 🤦‍♂️)`;
+
+        }
+        else{
+
+            stubbornPopupText.innerText=
+`🤔 Interesting Choice...
+
+Maybe Anuja is stubborn sometimes...
+
+But let's be honest...
+
+Aditya never listens to Anuja either. 😂`;
+
+        }
+
+        stubbornPopup.style.display="flex";
+
+    });
+
+});
+
+popupNextBtn.addEventListener("click",()=>{
+
+    stubbornPopup.style.display="none";
+
+    nextQuestion();
+
+});
+/* =========================
+   QUIZ BREAK POPUP
+========================= */
+
+document.getElementById("continueQuizBtn")
+.addEventListener("click",()=>{
+
+    document.getElementById("quizBreakPopup").style.display="none";
+
+    nextQuestion();
+
+});
+/* =========================
+   STAR RATING
+========================= */
+
+const star=document.getElementById("ratingStar");
+const line=document.querySelector(".ratingLine");
+const value=document.getElementById("ratingValue");
+
+let rating=1;
+let dragging=false;
+
+function updateRating(clientX){
+
+const rect=line.getBoundingClientRect();
+
+let x=clientX-rect.left;
+
+x=Math.max(0,Math.min(rect.width,x));
+
+star.style.left=(x-18)+"px";
+
+rating=Math.round((x/rect.width)*9)+1;
+
+value.innerHTML="Rating : "+rating+" ⭐";
+
+}
+
+star.addEventListener("mousedown",()=>dragging=true);
+
+document.addEventListener("mouseup",()=>dragging=false);
+
+document.addEventListener("mousemove",(e)=>{
+
+if(!dragging)return;
+
+updateRating(e.clientX);
+
+});
+
+star.addEventListener("touchstart",()=>dragging=true);
+
+document.addEventListener("touchend",()=>dragging=false);
+
+document.addEventListener("touchmove",(e)=>{
+
+if(!dragging)return;
+
+updateRating(e.touches[0].clientX);
+
+});
+
+document.getElementById("ratingNext")
+.addEventListener("click",()=>{
+
+if(value.innerHTML==="Drag the star ⭐"){
+
+alert("Give your rating first ⭐");
+
+return;
+
+}
+
+nextQuestion();
 
 });

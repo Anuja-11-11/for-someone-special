@@ -566,12 +566,292 @@
             class="quizInput"
             placeholder="Write your answer here..."></textarea>
 
-        <button class="nextQuestion finishBtn">
-            Finish ❤️
+        <button class="nextQuestion">
+            Next ➜
         </button>
 
     </div>
 
+    <!-- QUESTION 8 -->
+
+    <div class="quizScreen" id="q8">
+
+        <h2 class="questionTitle">
+            What was our first conversation about?
+        </h2>
+
+        <textarea
+            class="quizInput"
+            placeholder="Write your answer here..."></textarea>
+
+        <button class="nextQuestion finishBtn">
+            Next ➜
+        </button>
+
+    </div>
+
+    <!-- QUESTION 9 -->
+
+    <div class="quizScreen" id="q9">
+
+        <h2 class="questionTitle">
+            Who is more stubborn?
+        </h2>
+
+        <div class="options">
+
+            <button
+                class="quizOption stubbornOption"
+                data-answer="Anuja">
+                Anuja
+            </button>
+
+            <button
+                class="quizOption stubbornOption"
+                data-answer="Aditya">
+                Aditya
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- POPUP -->
+
+    <div id="stubbornPopup" class="popupOverlay">
+
+        <div class="popupBox">
+
+            <div id="stubbornPopupText"></div>
+
+            <button id="popupNextBtn">
+                Continue ❤️
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- QUESTION 9 -->
+
+    <div class="quizScreen" id="q9">
+
+        <h2 class="questionTitle">
+            Which memory still makes you smile
+            <br>
+            no matter how bad your day is? ❤️
+        </h2>
+
+        <textarea
+            class="quizInput"
+            placeholder="Tell me about that beautiful memory..."></textarea>
+
+        <button class="nextQuestion">
+            Next ➜
+        </button>
+
+    </div>
+
+    <!-- QUESTION 10 -->
+
+    <div class="quizScreen" id="q10">
+
+        <h2 class="questionTitle">
+            Is there any memory
+            <br>
+            we should recreate someday? ✨
+        </h2>
+
+        <textarea
+            class="quizInput"
+            placeholder="I'd love to know..."></textarea>
+
+        <button class="nextQuestion">
+            Next ➜
+        </button>
+
+    </div>
+
+    <!-- QUESTION 11 -->
+
+    <div class="quizScreen" id="q11">
+
+        <h2 class="questionTitle">
+            Which song feels like your soul
+            <br>
+            whenever you hear it? 🎵
+        </h2>
+
+        <textarea
+            class="quizInput"
+            placeholder="Write the song name..."></textarea>
+
+        <button class="nextQuestion">
+            Next ➜
+        </button>
+
+    </div>
+
+    <!-- =========================
+     QUESTION 12
+    ========================= -->
+
+    <div class="quizScreen" id="q12">
+
+        <h2 class="questionTitle">
+            What’s something about you
+            <br>
+            that you wish people understood better? ❤️
+        </h2>
+
+        <textarea
+            class="quizInput"
+            placeholder="Write your answer here..."></textarea>
+
+        <button class="nextQuestion" id="q12Next">
+            Next ➜
+        </button>
+
+    </div>
+
+    <!-- =========================
+        QUIZ BREAK POPUP
+    ========================= -->
+
+    <div id="quizBreakPopup" class="quizPopup">
+
+        <div class="quizPopupBox">
+
+            <h2>😂 Small Break!</h2>
+
+            <p>
+
+                By now you're probably feeling
+                <br>
+                like you're writing an exam paper 😂
+
+                <br><br>
+
+                But don't worry...
+
+                <br><br>
+
+                <strong>Only 3 questions left</strong>
+
+                <br>
+
+                to unlock your reward ❤️
+
+                <br><br>
+
+                <strong>Best of luck, Anuja! ☺️</strong>
+
+            </p>
+
+            <button id="continueQuizBtn">
+                Continue ❤️
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- QUESTION 13 -->
+
+    <div class="quizScreen" id="q13">
+
+        <h2 class="questionTitle">
+            What’s a small thing someone could do for you
+            <br>
+            that would mean everything? ❤️
+        </h2>
+
+        <textarea
+            class="quizInput"
+            placeholder="Write your answer here..."></textarea>
+
+        <button class="nextQuestion">
+            Next ➜
+        </button>
+
+    </div>
+
+    <!-- QUESTION 14 -->
+
+    <div class="quizScreen" id="q14">
+
+        <h2 class="questionTitle">
+
+            How many stars would you give
+            <br>
+            this surprise? ⭐
+
+        </h2>
+
+        <div class="ratingContainer">
+
+            <div class="ratingLine"></div>
+
+            <div id="ratingStar">
+                ⭐
+            </div>
+
+            <div class="ratingNumbers">
+
+                <span>1</span>
+                <span>2</span>
+                <span>3</span>
+                <span>4</span>
+                <span>5</span>
+                <span>6</span>
+                <span>7</span>
+                <span>8</span>
+                <span>9</span>
+                <span>10</span>
+
+            </div>
+
+        </div>
+
+        <p id="ratingValue">
+
+            Drag the star ⭐
+
+        </p>
+
+        <button
+            class="nextQuestion"
+            id="ratingNext">
+
+            Next ➜
+
+        </button>
+
+    </div>
+
+    <!-- QUESTION 15 -->
+
+    <div class="quizScreen" id="q15">
+
+        <h2 class="questionTitle">
+
+            Any message for the creator
+            <br>
+            of this surprise? 😊
+
+        </h2>
+
+        <textarea
+            class="quizInput"
+            placeholder="Write anything you'd like..."></textarea>
+
+        <button class="nextQuestion">
+
+            Reward Assured ❤️
+
+        </button>
+
+    </div>
 
     <!-- COMPLETED -->
 
@@ -583,16 +863,11 @@
 
         <p class="finishText">
 
-            Your answers have been recorded.
-
-            <br><br>
-
             I loved knowing more about you.
 
             <br><br>
 
-            One last surprise is waiting... 🎁
-
+            Let's claim your reward now! 🎁
         </p>
 
     </div>

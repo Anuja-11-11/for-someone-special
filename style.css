@@ -1216,7 +1216,7 @@ transform:translateY(0);
 
 font-size:26px;
 
-margin-bottom:25px;
+margin-top:0;
 
 }
 
@@ -1268,7 +1268,11 @@ width:100%;
 }
 
 .quizScreen{
-width:100%;
+justify-content:flex-start;
+align-items:center;
+padding-top:30px;
+padding-bottom:40px;
+overflow-y:auto;
 }
 /* =========================
    QUIZ POPUP

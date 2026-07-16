@@ -949,6 +949,14 @@ animation:pulse 1.5s infinite;
 
 @media(max-width:768px){
 
+#quizIntro,
+#quizWelcome{
+justify-content:flex-start;
+padding-top:35px;      /* Adjust this value if needed */
+padding-bottom:30px;
+overflow-y:auto;
+}
+
 .quizBigTitle{
 
 font-size:42px;

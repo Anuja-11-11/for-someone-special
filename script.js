@@ -1,4 +1,8 @@
 
+const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycby3Se4aRIbOEAJuvT9Aa60jEpBwom-DBRcFCrH3u-uRxDzXdPJ3x3fevH4MPR69Xw/exec";
+
+let quizAnswers = {};
+
 /* =========================
    PAGE 1 -> PAGE 2
 ========================= */
@@ -958,12 +962,57 @@ function showQuestion(index){
 
 }
 
+function getQuizQuestionNumber(screen) {
+    const screens = Array.from(quizScreens);
+    return screens.indexOf(screen) + 1;
+}
+
+function saveCurrentQuizAnswer(screen, answer) {
+    const questionNumber = getQuizQuestionNumber(screen);
+
+    if (questionNumber >= 1 && questionNumber <= 16) {
+        quizAnswers["q" + questionNumber] = answer;
+    }
+}
+
+function submitQuizAnswersToGoogleSheet() {
+
+    const data = {
+        q1: quizAnswers.q1 || "",
+        q2: quizAnswers.q2 || "",
+        q3: quizAnswers.q3 || "",
+        q4: quizAnswers.q4 || "",
+        q5: quizAnswers.q5 || "",
+        q6: quizAnswers.q6 || "",
+        q7: quizAnswers.q7 || "",
+        q8: quizAnswers.q8 || "",
+        q9: quizAnswers.q9 || "",
+        q10: quizAnswers.q10 || "",
+        q11: quizAnswers.q11 || "",
+        q12: quizAnswers.q12 || "",
+        q13: quizAnswers.q13 || "",
+        q14: quizAnswers.q14 || "",
+        q15: quizAnswers.q15 || "",
+        q16: quizAnswers.q16 || ""
+    };
+
+    fetch(GOOGLE_SHEET_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+            "Content-Type": "text/plain"
+        },
+        body: JSON.stringify(data)
+    }).catch(error => {
+        console.log("Google Sheet submission error:", error);
+    });
+}
 
 /* NEXT QUESTION */
 
 function nextQuestion(){
 
-    if(currentQuestion < quizScreens.length-1){
+    if(currentQuestion < quizScreens.length - 1){
 
         quizScreens[currentQuestion].classList.remove("active");
 
@@ -971,8 +1020,11 @@ function nextQuestion(){
 
         quizScreens[currentQuestion].classList.add("active");
 
+        // Final quiz screen reached
+        if(currentQuestion === quizScreens.length - 1){
+            submitQuizAnswersToGoogleSheet();
+        }
     }
-
 }
 
 
@@ -981,8 +1033,12 @@ function nextQuestion(){
 ========================= */
 
 document.querySelectorAll(".quizOption").forEach(btn=>{
-
     btn.addEventListener("click",function(){
+
+        // Don't handle stubborn question here
+        if (this.classList.contains("stubbornOption")) {
+            return;
+        }
 
         let parent = this.parentElement;
 
@@ -991,14 +1047,14 @@ document.querySelectorAll(".quizOption").forEach(btn=>{
 
         this.classList.add("selected");
 
+        // Save answer
+        let screen = this.closest(".quizScreen");
+        saveCurrentQuizAnswer(screen, this.innerText.trim());
+
         setTimeout(()=>{
-
             nextQuestion();
-
         },1000);
-
     });
-
 });
 
 
@@ -1007,41 +1063,30 @@ document.querySelectorAll(".quizOption").forEach(btn=>{
 ========================= */
 
 document.querySelectorAll(".nextQuestion").forEach(btn=>{
-
     btn.addEventListener("click",()=>{
 
-        // Find current quiz screen
         let screen = btn.closest(".quizScreen");
-
-        // Find textarea inside this screen
         let input = screen.querySelector(".quizInput, .otherInput");
 
-        // If there is a textbox, validate it
         if(input){
 
             if(input.value.trim() === ""){
-
-                alert("Are Madam ji, aapka hi din hai... aaj to bata dijiye 😒");
+                alert("Are Madam ji, aaj to bata dijiye 😒");
                 input.focus();
                 return;
-
             }
 
+            // Save written answer
+            saveCurrentQuizAnswer(screen, input.value.trim());
         }
-        /* QUESTION 12 BREAK */
 
         if(screen.id==="q12"){
-
             document.getElementById("quizBreakPopup").style.display="flex";
-
             return;
-
         }
 
         nextQuestion();
-
     });
-
 });
 
 
@@ -1072,6 +1117,34 @@ document.querySelectorAll(".otherBtn").forEach(btn=>{
 });
 
 
+document.querySelectorAll(".otherNext").forEach(btn=>{
+
+    btn.addEventListener("click",function(){
+
+        let screen = this.closest(".quizScreen");
+
+        let input = screen.querySelector(".otherInput");
+
+        let answer = input.value.trim();
+
+        // Don't allow empty answer
+        if(answer === ""){
+            alert("Please write your answer first 😊");
+            input.focus();
+            return;
+        }
+
+        // SAVE ANSWER
+        saveCurrentQuizAnswer(screen, answer);
+
+        // Go to next question
+        nextQuestion();
+
+    });
+
+});
+
+
 /* =========================
    ENTER KEY SUPPORT
 ========================= */
@@ -1087,12 +1160,13 @@ document.querySelectorAll(".quizInput,.otherInput")
 
             if(box.value.trim()===""){
 
-                alert("Are Madam ji, aapka hi din hai... aaj to bata dijiye 😒");
+                alert("Are Madam ji, aaj to bata dijiye 😒");
                 box.focus();
                 return;
 
             }
-
+            let screen = box.closest(".quizScreen");
+            saveCurrentQuizAnswer(screen, box.value.trim());
             nextQuestion();
 
         }
@@ -1124,6 +1198,10 @@ stubbornButtons.forEach(btn=>{
         this.classList.add("selected");
 
         popupFinished = false;
+
+        // Save stubborn question answer
+        let screen = this.closest(".quizScreen");
+        saveCurrentQuizAnswer(screen, this.dataset.answer);
 
         if(this.dataset.answer==="Aditya"){
 
@@ -1240,7 +1318,10 @@ alert("Give your rating first ⭐");
 return;
 
 }
+// Save rating answer
+let screen = document.getElementById("ratingNext").closest(".quizScreen");
 
+saveCurrentQuizAnswer(screen, rating);
 nextQuestion();
 
 });
